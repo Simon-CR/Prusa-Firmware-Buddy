@@ -21,7 +21,7 @@ namespace config {
 /// Max number of extruders/tools/slots
 /// Beware - if you change this, the EEPROM structure will become invalid and no migration procedures have been implemented.
 /// So if you really have to change this, erase your EEPROM content then.
-static constexpr const uint8_t toolCount = 5U;
+static constexpr const uint8_t toolCount = 12U;
 static_assert(toolCount < 15, "Up to 14 valid slots (+1 parking) is supported in EEPROM storage");
 
 // Printer's filament sensor setup
@@ -79,20 +79,20 @@ static constexpr uint16_t stepTimerQuantum = 256; // 256 = 128us
 static constexpr uint8_t feedToBondtechMaxRetries = 2;
 
 /// Distances
-static constexpr U_mm pulleyToCuttingEdge = 33.0_mm; /// 33.0_mm /// Pulley to cutting edge.
+static constexpr U_mm pulleyToCuttingEdge = 5.0_mm; /// 33.0_mm /// Pulley to cutting edge.
 /// Case 1: FINDA working: This should be the max retraction after FINDA un-triggers.
 /// Case 2: FINDA not working: calculate retraction from printer to this point.
-static constexpr U_mm filamentMinLoadedToMMU = 20.0_mm; /// Limit of retraction.
+static constexpr U_mm filamentMinLoadedToMMU = 10.0_mm; /// Limit of retraction.
 static constexpr U_mm ejectFromCuttingEdge = 40.0_mm; /// Eject should ignore FilamentMinLoadedToMMU and retract
 static constexpr U_mm cuttingEdgeRetract = 5.0_mm; /// Cutting retraction distance (filament should be flush with outlet)
 static constexpr U_mm cuttingEdgeToFinda = 18.5_mm; /// Cutting edge to FINDA MMU side -1mm tolerance should be ~18.5. FINDA shouldn't trigger here.
 static constexpr U_mm findaTriggerDistance = 4.5_mm; /// FINDA trigger distance +1.0_mm tolerance.
-static constexpr U_mm cuttingEdgeToFindaMidpoint = 22.85_mm; /// Cutting edge to Midpoint of FINDA should be 22.85_mm.
-static constexpr U_mm findaToCoupler = 12.0_mm; /// FINDA Coupler side to coupler screw.
+static constexpr U_mm cuttingEdgeToFindaMidpoint = 3.5_mm; /// Cutting edge to Midpoint of FINDA should be 22.85_mm.
+static constexpr U_mm findaToCoupler = 25.0_mm; /// FINDA Coupler side to coupler screw.
 static constexpr U_mm couplerToBowden = 3.5_mm; /// FINDA Coupler screw to bowden mmu side (in coupling).
 
 // Min, max and default bowden length setup
-static constexpr U_mm defaultBowdenLength = 360.0_mm; /// ~360.0_mm - Default Bowden length.
+static constexpr U_mm defaultBowdenLength = 600.0_mm; /// ~360.0_mm - Default Bowden length.
 static constexpr U_mm minimumBowdenLength = 341.0_mm; /// ~341.0_mm - Minimum bowden length.
 static constexpr U_mm maximumBowdenLength = 1000.0_mm; /// ~1000.0_mm - Maximum bowden length.
 static_assert(minimumBowdenLength.v <= defaultBowdenLength.v);
@@ -108,13 +108,14 @@ static constexpr U_mm fsensorToNozzleAvoidGrind = 5.0_mm;
 static constexpr U_mm fsensorUnloadCheckDistance = 40.0_mm;
 
 /// Begin: Pulley axis configuration
+/// NOTE FOR 12x: pulley is roughly 11.9mm diameter, adjust stepsPerUnit
 static constexpr AxisConfig pulley = {
-    .dirOn = false,
+    .dirOn = true,
     .mRes = MRes_8,
     .iRun = 13, /// 230mA
     .iHold = 0, /// 17mA in SpreadCycle, freewheel in StealthChop
     .stealth = false,
-    .stepsPerUnit = (200 * 8 / 19.147274),
+    .stepsPerUnit = (200 * 8 / 37.384921),
     .sg_thrs = 8,
 };
 
@@ -124,6 +125,7 @@ static constexpr PulleyLimits pulleyLimits = {
     .jerk = 4.0_mm_s,
     .accel = 800.0_mm_s2,
 };
+
 
 static constexpr U_mm_s pulleyUnloadFeedrate = 95._mm_s;
 /// 120mm_s is too much, the printer cannot send the status of fsensor that fast
@@ -152,22 +154,30 @@ static constexpr SelectorLimits selectorLimits = {
     .accel = 200.0_mm_s2,
 };
 
-static constexpr U_mm SelectorSlotDistance = 14.0_mm; /// Selector distance between two slots
-static constexpr U_mm SelectorOffsetFromMax = 1.0_mm; /// Selector offset from home max to slot 0
-static constexpr U_mm SelectorOffsetFromMin = 75.5_mm; /// Selector offset from home min to slot 0
+static constexpr U_mm SelectorSlotDistance = 6.06_mm; /// Selector distance between two slots
+static constexpr U_mm SelectorOffsetFromMax = -10.0_mm; /// Selector offset from home max to slot 0
+static constexpr U_mm SelectorOffsetFromMin = 64.5_mm; /// Selector offset from home min to slot 0
+static constexpr U_mm SelectorOffsetToPark = 10.5_mm; /// Selector additional space before parking (x12 only)
 
-/// slots 0-4 are the real ones, the 5th is the farthest parking positions
+/// slots 0-11 are the real ones, the 12th is the farthest parking positions
 /// selector.dirOn = true = Home at max: selector hits left side of the MMU body
 /// selector.dirOn = false = Home at min: selector POM nut hit the selector motor
 static constexpr U_mm selectorSlotPositions[toolCount + 1] = {
 
     ///selector max positions
-    SelectorOffsetFromMax + 0 * SelectorSlotDistance, ///1.0_mm + 0 * 14.0_mm = 1.0_mm
-    SelectorOffsetFromMax + 1 * SelectorSlotDistance, ///1.0_mm + 1 * 14.0_mm = 15.0_mm
-    SelectorOffsetFromMax + 2 * SelectorSlotDistance, ///1.0_mm + 2 * 14.0_mm = 29.0_mm
-    SelectorOffsetFromMax + 3 * SelectorSlotDistance, ///1.0_mm + 3 * 14.0_mm = 43.0_mm
-    SelectorOffsetFromMax + 4 * SelectorSlotDistance, ///1.0_mm + 4 * 14.0_mm = 57.0_mm
-    SelectorOffsetFromMax + 5 * SelectorSlotDistance ///1.0_mm + 5 * 14.0_mm = 71.0_mm
+    SelectorOffsetFromMax + 0 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 1 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 2 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 3 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 4 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 5 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 6 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 7 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 8 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 9 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 10 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 11 * SelectorSlotDistance,
+    SelectorOffsetFromMax + 12 * SelectorSlotDistance + SelectorOffsetToPark
 
     ///selector min positions
     //    SelectorOffsetFromMin - 1.0_mm - 0 * SelectorSlotDistance, ///75.5_mm - 1.0_mm - 0 * 14.0_mm = 74.5_mm
@@ -184,7 +194,7 @@ static constexpr U_mm_s selectorHomingFeedrate = 30._mm_s;
 
 /// Begin: Idler configuration
 static constexpr AxisConfig idler = {
-    .dirOn = true,
+    .dirOn = false,
     .mRes = MRes_16,
     .iRun = 31, /// 530mA
     .iHold = 5, /// 99mA - parked current
@@ -195,33 +205,47 @@ static constexpr AxisConfig idler = {
 
 /// Idler motion limits
 static constexpr IdlerLimits idlerLimits = {
-    .lenght = 225.0_deg,
+    .lenght = 330.0_deg,
     .jerk = 0.1_deg_s,
     .accel = 500.0_deg_s2,
 };
 
-static constexpr U_deg IdlerSlotDistance = 40.0_deg; /// Idler distance between two slots
-static constexpr U_deg IdlerOffsetFromHome = 18.0_deg; /// Idler offset from home to slots
+static constexpr U_deg IdlerSlotDistance = 25.4_deg; /// Idler distance between two slots
+static constexpr U_deg IdlerOffsetFromHome = 10.5_deg; /// Idler offset from home to slots
+static constexpr U_deg IdlerOffsetToPark = -2.5_deg;
 
-/// Absolute positions for Idler's slots: 0-4 are the real ones, the 5th index is the idle position
-/// Home ccw with 5th idler bearing facing selector
+/// Absolute positions for Idler's slots: 0-11 are the real ones, the 12th index is the idle position
 static constexpr U_deg idlerSlotPositions[toolCount + 1] = {
-    IdlerOffsetFromHome + 5 * IdlerSlotDistance, /// Slot 0 at 218 degree after homing ///18.0_deg + 5 * 40.0_deg = 218.0_deg
-    IdlerOffsetFromHome + 4 * IdlerSlotDistance, /// Slot 1 at 178 degree after homing ///18.0_deg + 4 * 40.0_deg = 178.0_deg
-    IdlerOffsetFromHome + 3 * IdlerSlotDistance, /// Slot 2 at 138 degree after homing ///18.0_deg + 3 * 40.0_deg = 138.0_deg
-    IdlerOffsetFromHome + 2 * IdlerSlotDistance, /// Slot 3 at 98 degree after homing ///18.0_deg + 2 * 40.0_deg = 98.0_deg
-    IdlerOffsetFromHome + 1 * IdlerSlotDistance, /// Slot 4 at 58 degree after homing ///18.0_deg + 1 * 40.0_deg = 58.0_deg
-    IdlerOffsetFromHome ///18.0_deg Fully disengaged all slots
+    IdlerOffsetFromHome + 12 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 11 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 10 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 9 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 8 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 7 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 6 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 5 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 4 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 3 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 2 * IdlerSlotDistance,
+    IdlerOffsetFromHome + 1 * IdlerSlotDistance,
+    IdlerOffsetFromHome + IdlerOffsetToPark
 };
 
-/// Intermediate positions for Idler's slots: 0-4 are the real ones, the 5th index is the idle position
+/// Intermediate positions for Idler's slots: 0-11 are the real ones, the 12th index is the idle position
 static constexpr U_deg idlerIntermediateSlotPositions[toolCount + 1] = {
-    IdlerOffsetFromHome + 4.75F * IdlerSlotDistance,
-    IdlerOffsetFromHome + 3.75F * IdlerSlotDistance,
-    IdlerOffsetFromHome + 2.75F * IdlerSlotDistance,
-    IdlerOffsetFromHome + 1.75F * IdlerSlotDistance,
-    IdlerOffsetFromHome + 0.75F * IdlerSlotDistance,
-    IdlerOffsetFromHome ///18.0_deg Fully disengaged all slots
+    IdlerOffsetFromHome + 11.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 10.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 9.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 8.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 7.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 6.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 5.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 4.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 3.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 2.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 1.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + 0.5F * IdlerSlotDistance,
+    IdlerOffsetFromHome + IdlerOffsetToPark  ///18.0_deg Fully disengaged all slots
 };
 
 static constexpr U_deg idlerParkPositionDelta = -IdlerSlotDistance + 5.0_deg / 2; // TODO verify
