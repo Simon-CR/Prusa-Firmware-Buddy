@@ -1,3 +1,4 @@
+
 #include "screen_menu_filament_changeall.hpp"
 
 #include <str_utils.hpp>
@@ -21,25 +22,11 @@ using namespace multi_filament_change;
 
 MI_ActionSelect::MI_ActionSelect(uint8_t tool_ix)
     : MenuItemSelectMenu({})
-    , tool_ix(tool_ix)
+    , tool_ix(tool_ix) //
 {
     has_filament_loaded = (config_store().get_filament_type(tool_ix) != FilamentType::none);
     set_is_hidden(!is_tool_enabled(tool_ix));
-
-    // Create buffer for the label
-    char buffer[32];
-    const unsigned displayed_number = static_cast<unsigned>(tool_ix) + 1;
-    
-    if (HAS_MMU2()) {
-        snprintf(buffer, sizeof(buffer), "Tool %u", displayed_number);
-        string_view_utf8 prefix = _(buffer);  // Use string_view_utf8 instead of std::string_view
-        snprintf(buffer, sizeof(buffer), "%.*s Filament", 
-                static_cast<int>(prefix.size()), prefix.data());
-    } else {
-        snprintf(buffer, sizeof(buffer), "Filament %u", displayed_number);
-    }
-    
-    SetLabel(_(buffer));
+    SetLabel(_(HAS_MMU2() ? N_("Tool %u Filament") : N_("Filament %u")).formatted(label_params, static_cast<unsigned>(tool_ix) + 1));
     index_mapping.set_item_enabled<Action::unload>(has_filament_loaded);
 }
 
