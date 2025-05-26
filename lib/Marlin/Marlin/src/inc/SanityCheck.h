@@ -744,7 +744,7 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
  */
 #if EXTRUDERS > 1
 
-  #if EXTRUDERS > 6
+  #if EXTRUDERS > 12
     #error "Marlin supports a maximum of 6 EXTRUDERS."
   #endif
 
@@ -2445,7 +2445,8 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
 #if ENABLED(PRUSA_MMU2)
   #if DISABLED(NOZZLE_PARK_FEATURE)
     #error "PRUSA_MMU2 requires NOZZLE_PARK_FEATURE."
-  #elif EXTRUDERS != 5
+  /** #elif EXTRUDERS != 5 */
+  #elif EXTRUDERS < 1 || EXTRUDERS > 12
     #error "PRUSA_MMU2 requires EXTRUDERS = 5."
   #elif DISABLED(ADVANCED_PAUSE_FEATURE)
     static_assert(nullptr == strstr(MMU2_FILAMENT_RUNOUT_SCRIPT, "M600"), "ADVANCED_PAUSE_FEATURE is required to use M600 with PRUSA_MMU2.");

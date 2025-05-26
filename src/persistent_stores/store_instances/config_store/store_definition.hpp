@@ -306,7 +306,7 @@ struct CurrentStore
     void set_tool_offset(uint8_t index, ToolOffset value);
 #endif
 
-    StoreItemArray<EncodedFilamentType, EncodedFilamentType {}, journal::hash("Loaded Filament"), 8, EXTRUDERS> loaded_filament_type;
+    StoreItemArray<EncodedFilamentType, EncodedFilamentType {}, journal::hash("Loaded Filament"), 12, EXTRUDERS> loaded_filament_type;
 
     /// User-defined filament ordering. Does not need to contain all the filaments - the rest will be appended to the back using the standard rules
     StoreItem<std::array<FilamentType, max_total_filament_count>, FilamentType::none, journal::hash("Filament Order")> filament_order;
@@ -317,7 +317,7 @@ struct CurrentStore
     static_assert(max_user_filament_type_count == 32);
     StoreItemArray<FilamentTypeParameters, defaults::user_filament_parameters, journal::hash("User Filament Parameters"), 32, user_filament_type_count> user_filament_parameters;
 
-    StoreItemArray<FilamentTypeParameters, defaults::adhoc_filament_parameters, journal::hash("Adhoc Filament Parameters"), 8, adhoc_filament_type_count> adhoc_filament_parameters;
+    StoreItemArray<FilamentTypeParameters, defaults::adhoc_filament_parameters, journal::hash("Adhoc Filament Parameters"), 12, adhoc_filament_type_count> adhoc_filament_parameters;
 
     StoreItem<std::bitset<max_user_filament_type_count>, defaults::visible_user_filament_types, journal::hash("Visible User Filament Types")> visible_user_filament_types;
 

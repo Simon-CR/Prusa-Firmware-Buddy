@@ -26,7 +26,7 @@ constexpr size_t user_filament_type_count = 8;
 
 /// Should match extruder count (or be higher), one for each extruder
 /// Hardcoded to prevent dependency pollution
-constexpr size_t adhoc_filament_type_count = 6;
+constexpr size_t adhoc_filament_type_count = 12;
 
 // !!! DO NOT CHANGE - this is used in config store
 struct __attribute__((packed)) FilamentTypeParameters {

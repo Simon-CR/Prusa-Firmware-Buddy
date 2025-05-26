@@ -11,11 +11,11 @@ class ScreenFactory {
     ScreenFactory(const ScreenFactory &) = delete;
 
 #if PRINTER_IS_PRUSA_XL()
-    using Storage = std::array<uint8_t, 4096>;
+    using Storage = std::array<uint8_t, 4176>;
 #elif PRINTER_IS_PRUSA_MINI()
     using Storage = std::array<uint8_t, 3344>;
 #else
-    using Storage = std::array<uint8_t, 4096>;
+    using Storage = std::array<uint8_t, 4176>;
 #endif
     alignas(std::max_align_t) static Storage storage;
 

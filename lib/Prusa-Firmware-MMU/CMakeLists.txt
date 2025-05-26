@@ -7,7 +7,7 @@ include(cmake/ReproducibleBuild.cmake)
 project(
   MMU
   LANGUAGES C CXX ASM
-  VERSION ${PROJECT_VERSION}
+  VERSION ${PROJECT_VERSION}y
   )
 
 #

@@ -64,7 +64,7 @@ typedef enum : int8_t {
   H_HEATBREAK_E0, H_HEATBREAK_E1, H_HEATBREAK_E2, H_HEATBREAK_E3, H_HEATBREAK_E4, H_HEATBREAK_E5,
 } heater_ind_t;
 static_assert(H_E0 == 0); // lots of places in are indexed by this, and assumes H_E0 is zero
-static_assert(EXTRUDERS <= 6);
+static_assert(EXTRUDERS <= 12);
 
 
 // PID storage
