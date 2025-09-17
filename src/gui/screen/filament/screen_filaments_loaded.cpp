@@ -28,7 +28,7 @@ MI_LOADED_FILAMENT::MI_LOADED_FILAMENT(DisplayFormat display_format, uint8_t too
 #endif
         } else {
             sb.append_string_view(_("Filament"));
-            sb.append_printf(" %d", tool + 1);
+            sb.append_printf(" %02d", tool + 1);
         }
 
         sb.append_string(": ");

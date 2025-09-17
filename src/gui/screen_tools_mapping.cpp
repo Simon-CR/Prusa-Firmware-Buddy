@@ -1109,7 +1109,7 @@ void ToolsMappingBody::handle_item_click() {
 #if !HAS_MMU2()
                 if (!hasActiveFilamentSensor(last_spool)) {
                     StringViewUtf8Parameters<2> params;
-                    tools_mapping_box(querying_user, _("Tool %d has both filament sensors disabled.\nUnable to set up spool join.").formatted(params, last_spool + 1), { Response::Back }, 0);
+                    tools_mapping_box(querying_user, _("Tool %02d has both filament sensors disabled.\nUnable to set up spool join.").formatted(params, last_spool + 1), { Response::Back }, 0);
                     cleanup_and_return_to_left();
                     return;
                 }

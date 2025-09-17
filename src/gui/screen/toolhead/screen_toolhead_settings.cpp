@@ -290,7 +290,7 @@ ScreenToolheadDetail::ScreenToolheadDetail(Toolhead toolhead)
     if (toolhead == all_toolheads) {
         header.SetText(_("ALL TOOLS"));
     } else if (prusa_toolchanger.is_toolchanger_enabled()) {
-        header.SetText(_("TOOL %d").formatted(title_params, std::get<ToolheadIndex>(toolhead) + 1));
+        header.SetText(_("TOOL %02d").formatted(title_params, std::get<ToolheadIndex>(toolhead) + 1));
     } else {
         header.SetText(_("TOOLHEAD"));
     }
@@ -347,7 +347,7 @@ MI_TOOLHEAD::MI_TOOLHEAD(Toolhead toolhead)
 
     } else {
         const ToolheadIndex ix = std::get<ToolheadIndex>(toolhead);
-        SetLabel(_("Tool %d").formatted(label_params, ix + 1));
+        SetLabel(_("Tool %02d").formatted(label_params, ix + 1));
 #if HAS_TOOLCHANGER()
         set_is_hidden(!prusa_toolchanger.is_tool_enabled(ix));
 #endif

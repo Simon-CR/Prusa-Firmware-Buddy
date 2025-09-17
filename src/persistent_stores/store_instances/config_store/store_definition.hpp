@@ -360,7 +360,7 @@ struct CurrentStore
     void set_tool_offset(uint8_t index, ToolOffset value);
 #endif
 
-    StoreItemArray<EncodedFilamentType, EncodedFilamentType {}, ItemFlag::printer_state, journal::hash("Loaded Filament"), 8, EXTRUDERS> loaded_filament_type;
+    StoreItemArray<EncodedFilamentType, EncodedFilamentType {}, ItemFlag::printer_state, journal::hash("Loaded Filament"), 12, EXTRUDERS> loaded_filament_type;
 
     /// User-defined filament ordering. Does not need to contain all the filaments - the rest will be appended to the back using the standard rules
     StoreItem<std::array<FilamentType, max_total_filament_count>, FilamentType::none, ItemFlag::user_presets, journal::hash("Filament Order")> filament_order;
@@ -377,12 +377,12 @@ struct CurrentStore
     StoreItemArray<FilamentTypeParameters_EEPROM3, FilamentTypeParameters_EEPROM3 {}, ItemFlag::user_presets, journal::hash("User Filament Parameters 3"), 32, user_filament_type_count> user_filament_parameters_3;
 #endif
 
-    StoreItemArray<FilamentTypeParameters_EEPROM1, defaults::adhoc_filament_parameters, ItemFlag::user_presets, journal::hash("Adhoc Filament Parameters"), 8, adhoc_filament_type_count> adhoc_filament_parameters;
+    StoreItemArray<FilamentTypeParameters_EEPROM1, defaults::adhoc_filament_parameters, ItemFlag::user_presets, journal::hash("Adhoc Filament Parameters"), 12, adhoc_filament_type_count> adhoc_filament_parameters;
 #if HAS_CHAMBER_API()
-    StoreItemArray<FilamentTypeParameters_EEPROM2, FilamentTypeParameters_EEPROM2 {}, ItemFlag::user_presets, journal::hash("Adhoc Filament Parameters 2"), 8, adhoc_filament_type_count> adhoc_filament_parameters_2;
+    StoreItemArray<FilamentTypeParameters_EEPROM2, FilamentTypeParameters_EEPROM2 {}, ItemFlag::user_presets, journal::hash("Adhoc Filament Parameters 2"), 12, adhoc_filament_type_count> adhoc_filament_parameters_2;
 #endif
 #if HAS_FILAMENT_HEATBREAK_PARAM()
-    StoreItemArray<FilamentTypeParameters_EEPROM3, FilamentTypeParameters_EEPROM3 {}, ItemFlag::user_presets, journal::hash("Adhoc Filament Parameters 3"), 8, adhoc_filament_type_count> adhoc_filament_parameters_3;
+    StoreItemArray<FilamentTypeParameters_EEPROM3, FilamentTypeParameters_EEPROM3 {}, ItemFlag::user_presets, journal::hash("Adhoc Filament Parameters 3"), 12, adhoc_filament_type_count> adhoc_filament_parameters_3;
 #endif
 
     StoreItem<std::bitset<max_user_filament_type_count>, defaults::visible_user_filament_types, ItemFlag::user_presets, journal::hash("Visible User Filament Types")> visible_user_filament_types;

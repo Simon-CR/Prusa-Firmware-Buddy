@@ -232,7 +232,7 @@ void EndResultBody::handle_consumed_tool_fields(const GCodeInfo &gcode, size_t n
             };
 
             if (show_t_label) {
-                snprintf(buff.data(), buff.size(), "T%d %s %dg", i + 1, print_fname(), used_g);
+                snprintf(buff.data(), buff.size(), "T%02d %s %dg", i + 1, print_fname(), used_g);
             } else {
                 snprintf(buff.data(), buff.size(), "%s %dg", print_fname(), used_g);
             }
