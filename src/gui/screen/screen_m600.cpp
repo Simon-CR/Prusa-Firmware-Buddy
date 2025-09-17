@@ -42,7 +42,7 @@ public:
         , tool(tool) {
         StringBuilder sb(label_buffer_);
         sb.append_string_view(_("Tool"));
-        sb.append_printf(" %d", tool + 1);
+        sb.append_printf(" %02d", tool + 1);
         SetLabel(string_view_utf8::MakeRAM(label_buffer_.data()));
     }
 

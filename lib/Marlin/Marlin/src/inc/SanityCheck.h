@@ -642,8 +642,8 @@ static_assert(COUNT(npp) == XYZ, "NOZZLE_PARK_POINT requires X, Y, and Z values.
  */
 #if EXTRUDERS > 1
 
-  #if EXTRUDERS > 6
-    #error "Marlin supports a maximum of 6 EXTRUDERS."
+  #if EXTRUDERS > 12
+    #error "Marlin supports a maximum of 12 EXTRUDERS."
   #endif
 
   #if ENABLED(HEATERS_PARALLEL)
@@ -2061,7 +2061,8 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
  * Prusa MMU2 requirements
  */
 #if ENABLED(PRUSA_MMU2)
-  #if EXTRUDERS != 5
+  /** #elif EXTRUDERS != 5 */
+  #if EXTRUDERS < 1 || EXTRUDERS > 12
     #error "PRUSA_MMU2 requires EXTRUDERS = 5."
   #elif DISABLED(ADVANCED_PAUSE_FEATURE)
     static_assert(nullptr == strstr(MMU2_FILAMENT_RUNOUT_SCRIPT, "M600"), "ADVANCED_PAUSE_FEATURE is required to use M600 with PRUSA_MMU2.");

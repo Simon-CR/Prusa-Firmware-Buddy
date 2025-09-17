@@ -52,7 +52,7 @@ MI_INFO_NOZZLE_TEMP::MI_INFO_NOZZLE_TEMP(uint8_t tool)
     sb.append_string_view(_("Nozzle Temp"));
 #if HAS_TOOLCHANGER()
     if (prusa_toolchanger.is_toolchanger_enabled()) {
-        sb.append_printf(" %i", tool + 1);
+        sb.append_printf(" %02i", tool + 1);
     }
 #endif
     SetLabel(string_view_utf8::MakeRAM(label_.data()));
@@ -70,7 +70,7 @@ MI_INFO_HEATBREAK_TEMP::MI_INFO_HEATBREAK_TEMP(uint8_t tool)
     sb.append_string_view(_("Heatbreak Temp"));
 #if HAS_TOOLCHANGER()
     if (prusa_toolchanger.is_toolchanger_enabled()) {
-        sb.append_printf(" %i", tool + 1);
+        sb.append_printf(" %02i", tool + 1);
     }
 #endif
     SetLabel(string_view_utf8::MakeRAM(label_.data()));
